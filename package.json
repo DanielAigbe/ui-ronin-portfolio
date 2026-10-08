@@ -1,0 +1,19 @@
+{
+  "name": "ui-ronin-portfolio",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.4.2",
+    "@splinetool/react-spline": "^4.1.0",
+    "@splinetool/runtime": "^2.0.73",
+    "astro": "^5.14.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  }
+}

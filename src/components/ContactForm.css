@@ -1,0 +1,10 @@
+.cf { display: flex; flex-direction: column; align-items: stretch; gap: 28px; padding: clamp(20px, 3vw, 40px); background: var(--surface); border: 1px solid var(--line); min-width: 0; }
+.cf-label { display: flex; flex-direction: column; gap: 10px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; color: var(--mist); text-transform: uppercase; }
+.cf input, .cf textarea { font: 17px var(--font-body); letter-spacing: 0; text-transform: none; color: var(--washi); background: var(--ink); border: 1px solid var(--line-strong); padding: 14px 16px; width: 100%; }
+.cf textarea { min-height: 160px; resize: vertical; line-height: 1.5; }
+.cf ::placeholder { color: var(--stone); }
+.cf-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.cf-chip { min-height: 44px; padding: 0 16px; font: 15px var(--font-body); color: var(--washi); background: transparent; border: 1px solid var(--line-strong); cursor: pointer; }
+.cf-chip.on { border-color: var(--crimson); background: #1a1210; }
+.cf-send { align-self: flex-start; min-height: 56px; }
+.cf-note { margin: 0; font-size: 15px; color: var(--mist); }

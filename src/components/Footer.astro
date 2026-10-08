@@ -1,0 +1,29 @@
+---
+// Replace the # links with your real profile URLs.
+const socials = [
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/daniel-aigbe-0723b7243/' },
+  { label: 'Behance', href: '#' },
+  { label: 'X', href: '#' },
+];
+---
+<footer class="footer">
+  <span class="copy">© {new Date().getFullYear()} Daniel Aigbe · UI_RONIN · Designed and built in Lagos</span>
+  <div class="soc">
+    {socials.map((s) => <a class="link" href={s.href}>{s.label}</a>)}
+  </div>
+</footer>
+
+<style>
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 32px var(--edge);
+    border-top: 1px solid var(--line);
+  }
+  .copy { font-family: var(--font-mono); font-size: 12px; color: var(--stone); }
+  .soc { display: flex; gap: 28px; font-size: 15px; }
+  .soc .link { border-color: transparent; }
+</style>

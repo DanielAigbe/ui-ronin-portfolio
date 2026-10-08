@@ -1,0 +1,44 @@
+---
+// One cover slot. `kind` decides what goes inside:
+//   scroll  — a tall page image that scrolls inside a browser frame (needs `image`)
+//   eflames — the animated e-Flames & Flavours logo
+//   image   — a plain image (needs `image`)
+//   anything else — a labelled placeholder box
+import EflamesLogo from './EflamesLogo.astro';
+interface Props { kind?: string; image?: string; label?: string; alt?: string; url?: string; tall?: boolean }
+const { kind = 'placeholder', image, label = '', alt = '', url = '', tall = false } = Astro.props;
+---
+{kind === 'scroll' && image ? (
+  <div class:list={['cover', 'browser', { tall }]} data-scrollmock data-cursor>
+    <div class="chrome"><i></i><i></i><i></i>{url && <span>{url}</span>}</div>
+    <div class="screen"><img src={image} alt={alt} loading="lazy" /></div>
+  </div>
+) : kind === 'eflames' ? (
+  <div class:list={['cover', 'eflames', { tall }]} data-ef><EflamesLogo /></div>
+) : kind === 'image' && image ? (
+  <div class:list={['cover', 'img', { tall }]}><img src={image} alt={alt} loading="lazy" /></div>
+) : (
+  <div class:list={['cover', 'placeholder', { tall }]}>{label}</div>
+)}
+
+<style>
+  .cover {
+    width: 100%;
+    aspect-ratio: 690 / 520;
+    overflow: hidden;
+    clip-path: polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 28px 100%, 0 calc(100% - 28px));
+    transition: transform 0.35s ease;
+  }
+  .cover.tall { aspect-ratio: 1312 / 760; }
+  .img img { width: 100%; height: 100%; object-fit: cover; }
+  .browser { background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; cursor: pointer; }
+  .chrome { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--line); flex: none; }
+  .chrome i { width: 10px; height: 10px; border-radius: 50%; background: var(--line-strong); }
+  .chrome span { margin-left: 12px; font-family: var(--font-mono); font-size: 12px; color: var(--stone); }
+  .screen { flex: 1; min-height: 0; overflow: hidden; }
+  .screen img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; transition: object-position 3s ease-in-out; }
+  .browser:hover .screen img, .browser.play .screen img { object-position: 50% 100%; transition: object-position 16s linear; }
+  .eflames { background: #8b0000; display: flex; align-items: center; justify-content: center; padding: 8%; }
+  .eflames :global(svg) { width: 100%; height: auto; overflow: visible; }
+  @media (prefers-reduced-motion: reduce) { .screen img { transition: none !important; } }
+</style>

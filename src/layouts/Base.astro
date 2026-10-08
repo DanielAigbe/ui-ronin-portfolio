@@ -1,0 +1,52 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  current?: string;
+  hideNav?: boolean;
+}
+const {
+  title,
+  description = 'Daniel Aigbe (UI_RONIN) is a product designer and frontend developer in Lagos. He designs and builds digital products, from brand identity to the interface and the code behind it.',
+  current = '',
+  hideNav = false,
+} = Astro.props;
+const base = 'Daniel Aigbe — Product Designer & Frontend Developer | UI_RONIN';
+const fullTitle = title ? `${title} · Daniel Aigbe (UI_RONIN)` : base;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#070707" />
+    <link rel="icon" href="/images/mark.webp" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Space+Grotesk:wght@400;500&family=Space+Mono&display=swap"
+    />
+  </head>
+  <body>
+    <div class="progress" aria-hidden="true"></div>
+    <div class="cursor" aria-hidden="true"></div>
+    <div class="page">
+      {!hideNav && <Nav current={current} />}
+      <slot />
+      <Footer />
+    </div>
+    <script>
+      import '../scripts/site.js';
+    </script>
+  </body>
+</html>

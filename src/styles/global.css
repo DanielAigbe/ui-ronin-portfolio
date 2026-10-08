@@ -1,0 +1,163 @@
+/* UI_RONIN — design tokens and base styles.
+   Change a colour or font here and it updates across the whole site. */
+:root {
+  --ink: #070707;
+  --surface: #0e0d0c;
+  --charcoal: #111010;
+  --line: #2a2724;
+  --line-strong: #3a3733;
+  --dim: #6f6a62;
+  --stone: #9c958a;
+  --mist: #c4bdb1;
+  --washi: #ede6d6;
+  --crimson: #c8102e;
+
+  --font-display: 'Unbounded', system-ui, sans-serif; /* swap here to change the display font */
+  --font-body: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'Space Mono', ui-monospace, monospace;
+
+  --gutter: clamp(20px, 8.3vw, 120px);
+  --edge: clamp(20px, 4.4vw, 64px);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--washi);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; }
+:focus-visible { outline: 2px solid var(--crimson); outline-offset: 3px; }
+
+.page { max-width: 1440px; margin: 0 auto; }
+.red { color: var(--crimson); }
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--stone);
+  text-transform: uppercase;
+}
+.lede { color: var(--mist); max-width: 60ch; }
+
+/* Buttons: corners cut like a blade */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 32px;
+  font: 500 16px var(--font-body);
+  color: var(--washi);
+  background: var(--crimson);
+  border: 0;
+  cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+.btn:hover { transform: translateY(-2px); filter: brightness(1.18); }
+.btn-line {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 22px;
+  font: 500 14px var(--font-body);
+  border: 1px solid var(--washi);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.btn-line:hover { background: var(--washi); color: var(--ink); }
+.link {
+  font-weight: 500;
+  border-bottom: 1px solid var(--dim);
+  padding-bottom: 4px;
+  transition: border-color 0.2s ease;
+}
+.link:hover { border-color: var(--crimson); }
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 6px 10px;
+  border: 1px solid var(--line-strong);
+  color: var(--mist);
+  text-transform: uppercase;
+}
+.tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 28px;
+}
+.section-head > div { display: flex; flex-direction: column; gap: 14px; }
+.section-head h2 { font-weight: 700; font-size: clamp(30px, 4vw, 56px); line-height: 1.05; }
+
+.placeholder {
+  background: var(--charcoal);
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 16px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--dim);
+}
+
+/* Scroll reveal: only hidden once JS has confirmed it can reveal them */
+.js .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.js .reveal.in { opacity: 1; transform: none; }
+
+/* Scroll progress line */
+.progress {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 2px;
+  height: 100vh;
+  background: var(--crimson);
+  transform-origin: top;
+  transform: scaleY(0);
+  z-index: 50;
+  pointer-events: none;
+}
+
+/* Custom cursor (desktop only) */
+.cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 50%;
+  background: var(--crimson);
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0;
+  transition: width 0.2s ease, height 0.2s ease, margin 0.2s ease, opacity 0.2s ease;
+  mix-blend-mode: screen;
+}
+.cursor.on { opacity: 1; }
+.cursor.big { width: 34px; height: 34px; margin: -17px 0 0 -17px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .reveal { opacity: 1; transform: none; transition: none; }
+  .btn, .btn-line { transition: none; }
+  .cursor, .progress { display: none; }
+}
