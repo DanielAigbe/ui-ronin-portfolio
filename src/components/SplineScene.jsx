@@ -7,12 +7,21 @@
 // The scene starts "locked": the page scrolls normally over it and a big button invites the visitor in.
 // One click unlocks it and gives it keyboard focus, so hover, click, drag and key presses all reach the 3D scene.
 // Clicking anywhere outside the scene locks it again.
-import { lazy, Suspense, useEffect, useRef, useState } from 'react';
+import { Component, lazy, Suspense, useEffect, useRef, useState } from 'react';
 import './SplineScene.css';
 
 const Spline = lazy(() => import('@splinetool/react-spline'));
 
-export default function SplineScene({ scene, embed, fallback, alt = '', title = '3D scene', hint = 'Hover, click and drag to play with it' }) {
+// If the 3D scene fails to load (slow network, Spline down), show the fallback instead of an empty gap.
+class Guard extends Component {
+  constructor(props) { super(props); this.state = { failed: false }; }
+  static getDerivedStateFromError() { return { failed: true }; }
+  componentDidCatch() { this.props.onFail && this.props.onFail(); }
+  render() { return this.state.failed ? this.props.fallback : this.props.children; }
+}
+
+// `bare` shows the scene with no frame or click-to-start step: the object sits straight on the page and is live at once.
+export default function SplineScene({ scene, embed, fallback, alt = '', title = '3D scene', hint = 'Hover, click and drag to play with it', bare = false }) {
   const [ready, setReady] = useState(false);
   const [active, setActive] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -48,15 +57,32 @@ export default function SplineScene({ scene, embed, fallback, alt = '', title = 
 
   if (!embed && !scene) return <div className="spline">{still}</div>;
 
+  if (bare && scene) {
+    return (
+      <div className="spline bare" data-nocursor role="img" aria-label={alt || title}>
+        {!ready && <span className="spline-loading">Loading 3D…</span>}
+        {mounted && (
+          <Guard fallback={<span className="spline-loading">3D scene couldn't load. Refresh to try again.</span>} onFail={() => setReady(true)}>
+            <Suspense fallback={null}>
+              <Spline scene={scene} onLoad={() => setReady(true)} className={live} />
+            </Suspense>
+          </Guard>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div ref={box} className={active ? 'spline is-active' : 'spline'} data-nocursor>
       {!ready && still}
       {!mounted ? null : embed ? (
         <iframe src={embed} title={title} frameBorder="0" allow="fullscreen" onLoad={() => setReady(true)} className={live} />
       ) : (
-        <Suspense fallback={null}>
-          <Spline scene={scene} onLoad={() => setReady(true)} className={live} />
-        </Suspense>
+        <Guard fallback={still}>
+          <Suspense fallback={null}>
+            <Spline scene={scene} onLoad={() => setReady(true)} className={live} />
+          </Suspense>
+        </Guard>
       )}
 
       {!active && (

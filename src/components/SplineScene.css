@@ -80,3 +80,8 @@
 @media (prefers-reduced-motion: reduce) {
   .spline, .spline-live, .spline-cta { transition: none; }
 }
+
+/* Bare: no frame, transparent, interactive straight away. */
+.spline.bare { aspect-ratio: 16 / 10; max-height: 82vh; background: none; border: 0; clip-path: none; overflow: visible; }
+.spline.bare .spline-live { pointer-events: auto; }
+.spline-loading { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); }
