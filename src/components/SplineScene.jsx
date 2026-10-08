@@ -64,7 +64,8 @@ export default function SplineScene({ scene, embed, fallback, alt = '', title = 
         {mounted && (
           <Guard fallback={<span className="spline-loading">3D scene couldn't load. Refresh to try again.</span>} onFail={() => setReady(true)}>
             <Suspense fallback={null}>
-              <Spline scene={scene} onLoad={() => setReady(true)} className={live} />
+              {/* renderOnDemand off: keep drawing every frame so the turntable spin never pauses */}
+              <Spline scene={scene} onLoad={() => setReady(true)} className={live} renderOnDemand={false} />
             </Suspense>
           </Guard>
         )}
