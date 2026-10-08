@@ -15,7 +15,16 @@ const Spline = lazy(() => import('@splinetool/react-spline'));
 export default function SplineScene({ scene, embed, fallback, alt = '', title = '3D scene', hint = 'Hover, click and drag to play with it' }) {
   const [ready, setReady] = useState(false);
   const [active, setActive] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const box = useRef(null);
+
+  // Create the 3D scene only in the browser, after React is running, so its load event is never missed.
+  // If the scene is slow to report that it has loaded, show it anyway after 12 seconds.
+  useEffect(() => {
+    setMounted(true);
+    const t = setTimeout(() => setReady(true), 12000);
+    return () => clearTimeout(t);
+  }, []);
 
   // Lock the scene again when the visitor clicks elsewhere on the page.
   useEffect(() => {
@@ -42,7 +51,7 @@ export default function SplineScene({ scene, embed, fallback, alt = '', title = 
   return (
     <div ref={box} className={active ? 'spline is-active' : 'spline'} data-nocursor>
       {!ready && still}
-      {embed ? (
+      {!mounted ? null : embed ? (
         <iframe src={embed} title={title} frameBorder="0" allow="fullscreen" onLoad={() => setReady(true)} className={live} />
       ) : (
         <Suspense fallback={null}>
